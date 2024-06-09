@@ -158,29 +158,7 @@ class LocationService : Service() {
     }
 
 
-    /*private fun sendNotification(message: String, placeName: String) {
-        val notificationId = contNotificacion++
-        val intent = Intent(this, MainActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            putExtra("location_name", placeName)
-        }
-        val pendingIntent: PendingIntent = PendingIntent.getActivity(
-            this,
-            notificationId, // Use notificationId as the requestCode to ensure uniqueness
-            intent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
 
-        val notification = NotificationCompat.Builder(this, "locationServiceChannel")
-            .setContentTitle("Lugar encontrado")
-            .setContentText(message)
-            .setSmallIcon(R.mipmap.ic_launcher)
-            .setContentIntent(pendingIntent)
-            .setAutoCancel(true)
-            .build()
-
-        notificationManager.notify(notificationId, notification)
-    }*/
 
     private fun sendNotification(message: String, wikipediaUrl: String) {
         val notificationId = contNotificacion++
@@ -207,26 +185,7 @@ class LocationService : Service() {
     }
 
 
-    /*private fun searchWikipediaAndNotify(placeName: String) {
-        val formattedQuery = placeName.replace(" ", "_")
-        serviceScope.launch {
-            try {
-                val resultadoBusqueda = withContext(Dispatchers.IO) {
-                    pageController.Buscar(formattedQuery)
-                }
-                if (resultadoBusqueda.isNotEmpty()) {
-                    sendNotification("Lugar: $placeName. Información encontrada en Wikipedia.", placeName)
-                    Log.d("ResultadoBusqueda", "Se encontró información: $resultadoBusqueda")
-                } else {
-                    Log.d("ResultadoBusqueda", "No se encontró información")
-                }
-            } catch (e: HttpException) {
-                Log.e("HTTP_ERROR", "No se encontró información. Error: ${e.message}")
-            } catch (e: Exception) {
-                Log.e("ERROR", "No se encontró información. Error: ${e.message}")
-            }
-        }
-    }*/
+
 
     private fun searchWikipediaAndNotify(placeName: String) {
         val formattedQuery = placeName.replace(" ", "_")

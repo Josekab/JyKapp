@@ -8,6 +8,7 @@
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
 
+
     <LinearLayout
         android:id="@+id/home_content"
         android:layout_width="match_parent"
@@ -26,5 +27,7 @@
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header"
         app:menu="@menu/main_activity_navigation_drawer" />
+
+
 
 </androidx.drawerlayout.widget.DrawerLayout>

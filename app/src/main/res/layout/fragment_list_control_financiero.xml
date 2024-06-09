@@ -42,6 +42,8 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:text="Buscar"
+            android:backgroundTint="#FFC107"
+            android:textColor="#000000"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/buscadorView"
             app:layout_constraintTop_toBottomOf="@+id/textViewTitle" />

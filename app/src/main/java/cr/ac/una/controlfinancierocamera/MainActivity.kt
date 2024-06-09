@@ -3,9 +3,15 @@ package cr.ac.una.controlfinancierocamera
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import android.view.MenuItem
+import android.view.View
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -25,6 +31,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1
     }
 
+    // Agrega las variables de instancia para el ImageView y el TextView
+    private lateinit var welcomeImage: ImageView
+    private lateinit var welcomeText: TextView
     lateinit var drawerLayout: DrawerLayout
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +41,26 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
+
+        // Inicializa el ImageView y el TextView
+        welcomeImage = ImageView(this).apply {
+            layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+            setImageResource(R.drawable.unnamed1)
+        }
+
+        welcomeText = TextView(this).apply {
+            layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+            textSize = 32f
+            text = "¡Bienvenido a buscador en Wikipedia!"
+            gravity = Gravity.CENTER
+            textAlignment = View.TEXT_ALIGNMENT_CENTER
+            setTextColor(Color.BLACK)
+        }
+
+        val layout = findViewById<LinearLayout>(R.id.home_content)
+        layout.addView(welcomeText)
+        layout.addView(welcomeImage)
+
 
         drawerLayout = findViewById(R.id.drawer_layout)
 
@@ -90,15 +119,18 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     override fun onBackPressed() {
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawer(GravityCompat.START)
-        } else {
-            super.onBackPressed()
-        }
+        super.onBackPressed()
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 
     override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {
         val title: Int
+
+        welcomeImage.visibility = View.GONE
+        welcomeText.visibility = View.GONE
+
         lateinit var fragment: Fragment
         when (menuItem.itemId) {
             R.id.nav_camera -> {

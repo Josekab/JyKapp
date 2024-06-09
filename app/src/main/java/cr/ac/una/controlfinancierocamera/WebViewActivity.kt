@@ -15,15 +15,6 @@ class WebViewActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_web_view)
 
-        val backButton = findViewById<Button>(R.id.backButton)
-        backButton.setOnClickListener {
-            // Replace the current fragment with ListControlFinancieroFragment
-            val fragment = ListControlFinancieroFragment()
-            val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.fragment_container, fragment)
-            transaction.addToBackStack(null)
-            transaction.commit()
-        }
 
         val webView = findViewById<WebView>(R.id.webView)
         webView.webViewClient = object : WebViewClient() {
