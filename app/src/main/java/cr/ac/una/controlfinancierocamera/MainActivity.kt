@@ -93,23 +93,42 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START)
         } else {
-            super.onBackPressed()
+            val currentFragment = supportFragmentManager.findFragmentById(R.id.home_content)
+
+            if (currentFragment is ListControlFinancieroFragment) {
+                super.onBackPressed()
+            } else {
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.home_content, ListControlFinancieroFragment())
+                    .commit()
+            }
         }
     }
 
     override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {
-        val title: Int
-        lateinit var fragment: Fragment
         when (menuItem.itemId) {
             R.id.nav_camera -> {
-                title = R.string.menu_camera
-                fragment = ListControlFinancieroFragment()
+                // Aquí puedes manejar la acción para "@+id/nav_camera"
+                // Por ejemplo, si quieres redirigir al usuario al inicio (MainActivity), puedes hacerlo de la siguiente manera:
+                val intent = Intent(this, MainActivity::class.java)
+                // Opcional: Si quieres limpiar todas las otras actividades en la pila de actividades, puedes usar las siguientes banderas
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                startActivity(intent)
             }
-
+            R.id.nav_gallery -> {
+                // Aquí puedes manejar la acción para "@+id/nav_gallery"
+                // Por ejemplo, si quieres redirigir al usuario a ListControlFinancieroFragment, puedes cargar ese fragmento
+                val fragment = ListControlFinancieroFragment()
+                reemplazarFragmento(fragment, getString(R.string.menu_gallery))
+            }
+            R.id.nav_manage -> {
+                // Aquí puedes manejar la acción para "@+id/nav_manage"
+                // Por ejemplo, si quieres que la aplicación se cierre cuando el usuario seleccione esta opción, puedes llamar a finish()
+                finish()
+            }
             else -> throw IllegalArgumentException("menu option not implemented!!")
         }
 
-        reemplazarFragmento(fragment, getString(title))
         drawerLayout.closeDrawer(GravityCompat.START)
         return true
     }

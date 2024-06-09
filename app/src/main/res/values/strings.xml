@@ -2,9 +2,9 @@
     <string name="app_name">Buscador en Wikipedia</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="menu_camera">Buscar en Wikipedia</string>
-    <string name="menu_gallery">Visualizar Articulo</string>
-    <string name="menu_tools">Configuración</string>
+    <string name="menu_camera">Inicio</string>
+    <string name="menu_gallery">Buscar en Wikipedia</string>
+    <string name="menu_tools">Salir</string>
     <string name="menu_share">Compartir</string>
     <string name="menu_send">Enviar</string>
     <string name="menu_group">Groupo</string>
