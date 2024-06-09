@@ -1,20 +1,18 @@
 package cr.ac.una.controlfinancierocamera
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentTransaction
 import cr.ac.menufragment.ListControlFinancieroFragment
 
 class WebViewActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_web_view)
-
 
         val webView = findViewById<WebView>(R.id.webView)
         webView.webViewClient = object : WebViewClient() {
@@ -34,5 +32,12 @@ class WebViewActivity : AppCompatActivity() {
             Log.e("WebViewActivity", "URL es null o está vacía")
             Toast.makeText(this, "URL inválida. No se puede cargar la página.", Toast.LENGTH_SHORT).show()
         }
+    }
+    @Suppress("DEPRECATION")
+    override fun onBackPressed() {
+        val intent = Intent(this, MainActivity::class.java)
+        intent.putExtra("openListControlFinancieroFragment", true)
+        startActivity(intent)
+        finish()
     }
 }

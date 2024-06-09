@@ -70,9 +70,9 @@ class LocationService : Service() {
 
     private fun createNotification(message: String): Notification {
         return NotificationCompat.Builder(this, "locationServiceChannel")
-            .setContentTitle("Location Service")
+            .setContentTitle("Servicio de Ubicacion")
             .setContentText(message)
-            .setSmallIcon(R.mipmap.ic_launcher)
+            .setSmallIcon(R.mipmap.logo)
             .build()
     }
 
@@ -137,16 +137,16 @@ class LocationService : Service() {
             if (task.isSuccessful) {
                 val response = task.result
                 val topPlaces = response.placeLikelihoods
-                    .sortedByDescending { it.likelihood }
                     .take(1)
 
                 topPlaces.forEach { placeLikelihood ->
                     val placeName = placeLikelihood.place.name ?: "Unknown"
                     val message = "Lugar: $placeName, Probabilidad: ${placeLikelihood.likelihood}"
-                    //sendNotification(message, placeName)
                     Log.d("LocationService", message)
-                    // Call searchWikipediaAndNotify with the place name
-                    searchWikipediaAndNotify(placeName)
+                    // Update the foreground notification with the place name
+                    startForeground(1, createNotification(placeName))
+                    // Call searchWikipediaAndNotify with the place name and coordinates
+                    searchWikipediaAndNotify(placeName, latitude, longitude)
                 }
             } else {
                 val exception = task.exception
@@ -157,30 +157,6 @@ class LocationService : Service() {
         }
     }
 
-
-    /*private fun sendNotification(message: String, placeName: String) {
-        val notificationId = contNotificacion++
-        val intent = Intent(this, MainActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            putExtra("location_name", placeName)
-        }
-        val pendingIntent: PendingIntent = PendingIntent.getActivity(
-            this,
-            notificationId, // Use notificationId as the requestCode to ensure uniqueness
-            intent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
-
-        val notification = NotificationCompat.Builder(this, "locationServiceChannel")
-            .setContentTitle("Lugar encontrado")
-            .setContentText(message)
-            .setSmallIcon(R.mipmap.ic_launcher)
-            .setContentIntent(pendingIntent)
-            .setAutoCancel(true)
-            .build()
-
-        notificationManager.notify(notificationId, notification)
-    }*/
 
     private fun sendNotification(message: String, wikipediaUrl: String) {
         val notificationId = contNotificacion++
@@ -195,40 +171,33 @@ class LocationService : Service() {
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
+        // Create an Intent for the action button
+        val buttonIntent = Intent(this, WebViewActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            putExtra("url", wikipediaUrl)
+        }
+        val buttonPendingIntent: PendingIntent = PendingIntent.getActivity(
+            this,
+            notificationId, // Use notificationId as the requestCode to ensure uniqueness
+            buttonIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
         val notification = NotificationCompat.Builder(this, "locationServiceChannel")
-            .setContentTitle("Lugar encontrado")
+            .setContentTitle("Articulo Encontrado")
             .setContentText(message)
-            .setSmallIcon(R.mipmap.ic_launcher)
+            .setSmallIcon(R.mipmap.logo)
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)
+            .setStyle(NotificationCompat.BigTextStyle().bigText(message)) // Set the style to BigTextStyle to make the notification expandable
+            .addAction(R.drawable.logo, "Mostrar", buttonPendingIntent) // Add the action button
             .build()
 
         notificationManager.notify(notificationId, notification)
     }
 
 
-    /*private fun searchWikipediaAndNotify(placeName: String) {
-        val formattedQuery = placeName.replace(" ", "_")
-        serviceScope.launch {
-            try {
-                val resultadoBusqueda = withContext(Dispatchers.IO) {
-                    pageController.Buscar(formattedQuery)
-                }
-                if (resultadoBusqueda.isNotEmpty()) {
-                    sendNotification("Lugar: $placeName. Información encontrada en Wikipedia.", placeName)
-                    Log.d("ResultadoBusqueda", "Se encontró información: $resultadoBusqueda")
-                } else {
-                    Log.d("ResultadoBusqueda", "No se encontró información")
-                }
-            } catch (e: HttpException) {
-                Log.e("HTTP_ERROR", "No se encontró información. Error: ${e.message}")
-            } catch (e: Exception) {
-                Log.e("ERROR", "No se encontró información. Error: ${e.message}")
-            }
-        }
-    }*/
-
-    private fun searchWikipediaAndNotify(placeName: String) {
+    private fun searchWikipediaAndNotify(placeName: String, latitude: Double, longitude: Double) {
         val formattedQuery = placeName.replace(" ", "_")
         serviceScope.launch {
             try {
@@ -238,7 +207,8 @@ class LocationService : Service() {
                 if (resultadoBusqueda.isNotEmpty()) {
                     val firstResultTitle = resultadoBusqueda.first().title
                     val wikipediaUrl = "https://es.wikipedia.org/wiki/$firstResultTitle"
-                    sendNotification("Lugar: $placeName. Información encontrada en Wikipedia.", wikipediaUrl)
+                    val notificationMessage = "Artículo: $firstResultTitle, Lugar: $placeName, Coordenadas: ($latitude, $longitude)"
+                    sendNotification(notificationMessage, wikipediaUrl)
                     Log.d("ResultadoBusqueda", "Se encontró información: $resultadoBusqueda")
                 } else {
                     Log.d("ResultadoBusqueda", "No se encontró información")
