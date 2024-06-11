@@ -22,7 +22,7 @@ import android.content.Intent
 import cr.ac.una.LocationWiki.R
 import cr.ac.una.LocationWiki.WebViewFragment
 
-class ListControlFinancieroFragment : Fragment(), BuscadorAdapter.OnItemClickListener {
+class ListControlFinancieroFragment : Fragment(){
 
     private lateinit var buscadorAdapter: BuscadorAdapter
     private val pageController = PageController()
@@ -50,7 +50,7 @@ class ListControlFinancieroFragment : Fragment(), BuscadorAdapter.OnItemClickLis
         }
 
         val listView: ListView = view.findViewById(R.id.listaMovimientos)
-        buscadorAdapter = BuscadorAdapter(requireContext(), mutableListOf(), this)
+        buscadorAdapter = BuscadorAdapter(requireContext(), mutableListOf())
         listView.adapter = buscadorAdapter
 
         // Manejar búsqueda desde los argumentos
@@ -86,22 +86,5 @@ class ListControlFinancieroFragment : Fragment(), BuscadorAdapter.OnItemClickLis
         }
     }
 
-    override fun onItemClick(item: page) {
-        val url = item.url
-        if (!url.isNullOrBlank()) {
-            val bundle = Bundle()
-            bundle.putString("url", url)
-            val fragment = WebViewFragment().apply {
-                arguments = bundle
-            }
-            requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.home_content, fragment)
-                .addToBackStack(null)
-                .commit()
-        } else {
-            Log.e("ListControlFinancieroFragment", "URL es null o está vacía")
-            Toast.makeText(context, "URL inválida. No se puede cargar la página.", Toast.LENGTH_SHORT).show()
-        }
-    }
 
 }

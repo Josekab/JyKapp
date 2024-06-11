@@ -16,15 +16,8 @@ import cr.ac.una.LocationWiki.R
 import cr.ac.una.LocationWiki.WebViewFragment
 
 
-class BuscadorAdapter(
-    context: Context,
-    pages: List<page>,
-    private val listener: OnItemClickListener
-) : ArrayAdapter<page>(context, 0, pages) {
-
-    interface OnItemClickListener {
-        fun onItemClick(page: page)
-    }
+class BuscadorAdapter(context: Context, pages: List<page>) :
+    ArrayAdapter<page>(context, 0, pages) {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val view = convertView ?: LayoutInflater.from(context).inflate(R.layout.list_busqueda, parent, false)
@@ -44,13 +37,12 @@ class BuscadorAdapter(
             Glide.with(context)
                 .load(url)
                 .into(imageView)
-        } ?: imageView.setImageResource(R.drawable.placeholder) // Imagen placeholder
+        }
 
-        // Aquí cambiamos la lógica para abrir la WebViewActivity
         view.setOnClickListener {
             val bundle = Bundle().apply {
                 putSerializable("page", pageItem)
-                putString("url", "https://es.wikipedia.org/wiki/$%7BpageItem?.title}") // Construye la URL del artículo de la lista Wiki
+                putString("url", "https://es.wikipedia.org/wiki/${pageItem?.title}") // Construye la URL del artículo de la lista Wiki
             }
             val fragment = WebViewFragment().apply {
                 arguments = bundle
