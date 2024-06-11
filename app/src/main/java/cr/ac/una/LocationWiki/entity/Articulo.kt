@@ -1,4 +1,4 @@
-package cr.ac.una.controlfinancierocamera.entity
+package cr.ac.una.LocationWiki.entity
 
 import android.os.Parcel
 import android.os.Parcelable

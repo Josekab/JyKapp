@@ -12,15 +12,15 @@ import android.widget.ListView
 import android.widget.SearchView
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
-import cr.ac.una.controlfinancierocamera.adapter.BuscadorAdapter
-import cr.ac.una.controlfinancierocamera.controller.PageController
+import cr.ac.una.LocationWiki.adapter.BuscadorAdapter
+import cr.ac.una.LocationWiki.controller.PageController
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import cr.ac.una.controlfinancierocamera.clases.page
+import cr.ac.una.LocationWiki.clases.page
 import android.content.Intent
-import cr.ac.una.controlfinancierocamera.R
-import cr.ac.una.controlfinancierocamera.WebViewActivity
+import cr.ac.una.LocationWiki.R
+import cr.ac.una.LocationWiki.WebViewActivity
 
 class ListControlFinancieroFragment : Fragment(), BuscadorAdapter.OnItemClickListener {
 

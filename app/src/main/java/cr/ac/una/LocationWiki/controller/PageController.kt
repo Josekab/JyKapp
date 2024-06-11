@@ -1,7 +1,7 @@
-package cr.ac.una.controlfinancierocamera.controller
+package cr.ac.una.LocationWiki.controller
 
-import cr.ac.una.controlfinancierocamera.clases.page
-import cr.ac.una.controlfinancierocamera.service.PagesService
+import cr.ac.una.LocationWiki.clases.page
+import cr.ac.una.LocationWiki.service.PagesService
 
 class PageController {
     var pagesService = PagesService()

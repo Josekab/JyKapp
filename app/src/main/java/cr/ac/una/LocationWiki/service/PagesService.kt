@@ -1,7 +1,7 @@
-package cr.ac.una.controlfinancierocamera.service
+package cr.ac.una.LocationWiki.service
 
 import com.google.gson.GsonBuilder
-import cr.ac.una.controlfinancierocamera.dao.PageDAO
+import cr.ac.una.LocationWiki.dao.PageDAO
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 

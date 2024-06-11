@@ -1,4 +1,4 @@
-package cr.ac.una.controlfinancierocamera
+package cr.ac.una.LocationWiki
 
 import android.os.Bundle
 import android.view.LayoutInflater

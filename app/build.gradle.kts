@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "cr.ac.una.controlfinancierocamera"
+    namespace = "cr.ac.una.LocationWiki"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "cr.ac.una.controlfinancierocamera"
+        applicationId = "cr.ac.una.LocationWiki"
         minSdk = 28
         targetSdk = 34
         versionCode = 1

@@ -1,4 +1,4 @@
-package cr.ac.una.controlfinancierocamera.adapter
+package cr.ac.una.LocationWiki.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -8,10 +8,10 @@ import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
-import cr.ac.una.controlfinancierocamera.clases.page
+import cr.ac.una.LocationWiki.clases.page
 import android.content.Intent
-import cr.ac.una.controlfinancierocamera.R
-import cr.ac.una.controlfinancierocamera.WebViewActivity
+import cr.ac.una.LocationWiki.R
+import cr.ac.una.LocationWiki.WebViewActivity
 
 
 class BuscadorAdapter(
