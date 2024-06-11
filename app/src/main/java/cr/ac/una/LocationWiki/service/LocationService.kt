@@ -72,7 +72,7 @@ class LocationService : Service() {
         return NotificationCompat.Builder(this, "locationServiceChannel")
             .setContentTitle("Servicio de Ubicacion")
             .setContentText(message)
-            .setSmallIcon(R.mipmap.logo)
+            .setSmallIcon(R.mipmap.ic_launcher_round)
             .build()
     }
 
@@ -186,7 +186,7 @@ class LocationService : Service() {
         val notification = NotificationCompat.Builder(this, "locationServiceChannel")
             .setContentTitle("Articulo Encontrado")
             .setContentText(message)
-            .setSmallIcon(R.mipmap.logo)
+            .setSmallIcon(R.mipmap.ic_launcher_round)
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)
             .setStyle(NotificationCompat.BigTextStyle().bigText(message)) // Set the style to BigTextStyle to make the notification expandable
