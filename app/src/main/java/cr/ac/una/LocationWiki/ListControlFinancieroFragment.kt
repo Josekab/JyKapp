@@ -20,7 +20,7 @@ import kotlinx.coroutines.withContext
 import cr.ac.una.LocationWiki.clases.page
 import android.content.Intent
 import cr.ac.una.LocationWiki.R
-import cr.ac.una.LocationWiki.WebViewActivity
+import cr.ac.una.LocationWiki.WebViewFragment
 
 class ListControlFinancieroFragment : Fragment(), BuscadorAdapter.OnItemClickListener {
 
@@ -86,11 +86,22 @@ class ListControlFinancieroFragment : Fragment(), BuscadorAdapter.OnItemClickLis
         }
     }
 
-    override fun onItemClick(page: page) {
-        val url = "https://es.wikipedia.org/wiki/${page.title}"
-        val intent = Intent(requireContext(), WebViewActivity::class.java).apply {
-            putExtra("url", url)
+    override fun onItemClick(item: page) {
+        val url = item.url
+        if (!url.isNullOrBlank()) {
+            val bundle = Bundle()
+            bundle.putString("url", url)
+            val fragment = WebViewFragment().apply {
+                arguments = bundle
+            }
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.home_content, fragment)
+                .addToBackStack(null)
+                .commit()
+        } else {
+            Log.e("ListControlFinancieroFragment", "URL es null o está vacía")
+            Toast.makeText(context, "URL inválida. No se puede cargar la página.", Toast.LENGTH_SHORT).show()
         }
-        startActivity(intent)
     }
+
 }

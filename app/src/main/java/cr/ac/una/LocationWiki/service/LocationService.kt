@@ -26,14 +26,16 @@ import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest
 import com.google.android.libraries.places.api.net.PlacesClient
+import cr.ac.una.LocationWiki.MainActivity
 import cr.ac.una.LocationWiki.R
-import cr.ac.una.LocationWiki.WebViewActivity
+import cr.ac.una.LocationWiki.WebViewFragment
 import cr.ac.una.LocationWiki.controller.PageController
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
+
 
 class LocationService : Service() {
 
@@ -160,7 +162,7 @@ class LocationService : Service() {
 
     private fun sendNotification(message: String, wikipediaUrl: String) {
         val notificationId = contNotificacion++
-        val intent = Intent(this, WebViewActivity::class.java).apply {
+        val intent = Intent(this, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             putExtra("url", wikipediaUrl)
         }
@@ -172,7 +174,7 @@ class LocationService : Service() {
         )
 
         // Create an Intent for the action button
-        val buttonIntent = Intent(this, WebViewActivity::class.java).apply {
+        val buttonIntent = Intent(this, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             putExtra("url", wikipediaUrl)
         }

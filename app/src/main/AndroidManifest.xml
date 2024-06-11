@@ -24,9 +24,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.LocationWiki"
         tools:targetApi="31">
-        <activity
-            android:name="cr.ac.una.LocationWiki.WebViewActivity"
-            android:exported="false" />
+
 
         <service
             android:name="cr.ac.una.LocationWiki.service.LocationService"

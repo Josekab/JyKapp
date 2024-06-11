@@ -30,6 +30,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        val url = intent.getStringExtra("url")
+        if (url != null) {
+            val fragment = WebViewFragment.newInstance(url)
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.home_content, fragment)
+                .commit()
+        }
+
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
 

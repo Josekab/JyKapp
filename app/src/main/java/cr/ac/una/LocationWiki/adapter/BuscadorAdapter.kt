@@ -10,8 +10,10 @@ import android.widget.TextView
 import com.bumptech.glide.Glide
 import cr.ac.una.LocationWiki.clases.page
 import android.content.Intent
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import cr.ac.una.LocationWiki.R
-import cr.ac.una.LocationWiki.WebViewActivity
+import cr.ac.una.LocationWiki.WebViewFragment
 
 
 class BuscadorAdapter(
@@ -46,13 +48,17 @@ class BuscadorAdapter(
 
         // Aquí cambiamos la lógica para abrir la WebViewActivity
         view.setOnClickListener {
-            val pageItem = getItem(position)
-            val url = "https://es.wikipedia.org/wiki/${pageItem?.title}"
-
-            val intent = Intent(context, WebViewActivity::class.java).apply {
-                putExtra("url", url)
+            val bundle = Bundle().apply {
+                putSerializable("page", pageItem)
+                putString("url", "https://es.wikipedia.org/wiki/$%7BpageItem?.title}") // Construye la URL del artículo de la lista Wiki
             }
-            context.startActivity(intent)
+            val fragment = WebViewFragment().apply {
+                arguments = bundle
+            }
+            (context as AppCompatActivity).supportFragmentManager.beginTransaction()
+                .replace(R.id.home_content, fragment)
+                .addToBackStack(null)
+                .commit()
         }
 
         return view
