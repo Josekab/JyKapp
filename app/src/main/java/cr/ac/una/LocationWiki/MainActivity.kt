@@ -1,13 +1,16 @@
 package cr.ac.una.LocationWiki
 
 import android.Manifest
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
@@ -19,6 +22,7 @@ import com.google.android.material.navigation.NavigationView
 import cr.ac.menufragment.ListControlFinancieroFragment
 import cr.ac.una.LocationWiki.service.LocationService
 
+
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     companion object {
@@ -26,6 +30,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     lateinit var drawerLayout: DrawerLayout
+    private var isLocationServiceRunning = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -56,12 +62,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val navigationView = findViewById<NavigationView>(R.id.navigation_view)
         navigationView.setNavigationItemSelectedListener(this)
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, arrayOf(
-                Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.FOREGROUND_SERVICE), LOCATION_PERMISSION_REQUEST_CODE)
-        } else {
-            startLocationService()
+        val btnToggleLocation = findViewById<Button>(R.id.btn_toggle_location)
+        btnToggleLocation.setOnClickListener {
+            if (isLocationServiceRunning) {
+                stopLocationService()
+            } else {
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    showLocationPermissionDialog()
+                } else {
+                    startLocationService()
+                }
+            }
         }
 
         // Manejar el Intent
@@ -74,13 +85,50 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
+    private fun showLocationPermissionDialog() {
+        AlertDialog.Builder(this)
+            .setTitle(R.string.location_permission_title)
+            .setMessage(R.string.location_permission_message)
+            .setPositiveButton(R.string.ok) { dialog, which ->
+                // Antes de solicitar el permiso, muestra un aviso destacado
+                showBackgroundLocationNotice()
+            }
+            .setNegativeButton(R.string.cancel) { dialog, which ->
+                Toast.makeText(this, "Permiso de ubicación denegado", Toast.LENGTH_SHORT).show()
+            }
+            .create()
+            .show()
+    }
+
+    private fun showBackgroundLocationNotice() {
+        AlertDialog.Builder(this)
+            .setTitle("Uso de la ubicación en segundo plano")
+            .setMessage("Nuestra aplicación necesita acceder a tu ubicación incluso cuando no estás utilizando la aplicación. Utilizamos esta información para informarte cuando se encuentre articulos cercanos a tu ubicacion.")
+            .setPositiveButton("Entendido") { dialog, which ->
+                // Ahora solicita el permiso
+                ActivityCompat.requestPermissions(this,
+                    arrayOf(
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.ACCESS_COARSE_LOCATION,
+                        Manifest.permission.FOREGROUND_SERVICE
+                    ),
+                    LOCATION_PERMISSION_REQUEST_CODE
+                )
+            }
+            .setNegativeButton(R.string.cancel) { dialog, which ->
+                Toast.makeText(this, "Permiso de ubicación denegado", Toast.LENGTH_SHORT).show()
+            }
+            .create()
+            .show()
+    }
+
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 startLocationService()
             } else {
-                Toast.makeText(this, "Location permission denied", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Permiso de ubicación denegado", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -152,5 +200,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private fun startLocationService() {
         val serviceIntent = Intent(this, LocationService::class.java)
         ContextCompat.startForegroundService(this, serviceIntent)
+        isLocationServiceRunning = true
+    }
+
+    private fun stopLocationService() {
+        val serviceIntent = Intent(this, LocationService::class.java)
+        stopService(serviceIntent)
+        isLocationServiceRunning = false
     }
 }

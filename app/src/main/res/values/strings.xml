@@ -9,6 +9,11 @@
     <string name="menu_send">Enviar</string>
     <string name="menu_group">Groupo</string>
     <string name="copyright">© Dispositivos móviles</string>
+
+    <string name="location_permission_title">Permiso de Ubicación Necesario</string>
+    <string name="location_permission_message">Esta aplicación recopila datos de ubicación para proporcionar servicios personalizados y mejorar la experiencia del usuario. La información de ubicación se utilizará para encontrar articulos incluso cuando no utilizas la app. ¿Deseas permitir el acceso a tu ubicación?</string>
+    <string name="ok">Aceptar</string>
+    <string name="cancel">Cancelar</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment genérico</string>
 </resources>
